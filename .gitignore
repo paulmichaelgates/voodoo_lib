@@ -1,0 +1,37 @@
+# macOS
+.DS_Store
+
+# Compiled object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Compiled dynamic libraries
+*.dylib
+*.so
+*.so.*
+
+# Compiled static libraries
+*.a
+
+# Compiled executables
+*.exe
+*.out
+
+# Dependency directories
+.ccls-cache
+.vscode
+.idea
+*.dSYM
+*.dir
+
+# Text editor swap files
+*~
+.#*
+*.swp
+
+# Miscellaneous
+*.log
+*.bak
+*.tmp
