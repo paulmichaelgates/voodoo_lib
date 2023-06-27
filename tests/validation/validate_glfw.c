@@ -23,7 +23,7 @@ const char *fragmentShaderSource = "#version 330 core\n"
 
 "void main()\n"
 "{\n"
-"    FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+"    FragColor = vec4(1.1f, 1.5f, 0.2f, 1.0f);\n"
 "}\0";
 
 int main()
@@ -34,17 +34,36 @@ int main()
 int major, minor, revision;
 unsigned int VBO;
 unsigned int VAO;
+unsigned int EBO;
 unsigned int vertex_shader;
 unsigned int fragment_shader;
 unsigned int shader_program;
 int  success;
 char infoLog[512];
 
-float vertices[] = {
-   -0.5f, -0.5f, 0.0f,
-    0.5f, -0.5f, 0.0f,
-    0.0f,  0.5f, 0.0f
-};  
+/*
+ * Vertices for a triangle
+ */
+// float tri_vertices[] = {
+//    -0.5f, -0.5f, 0.0f,
+//     0.5f, -0.5f, 0.0f,
+//     0.0f,  0.5f, 0.0f
+// };  
+
+/*
+ * Vertices for a rectangle
+ */
+float rect_vertices[] = {
+     0.5f,  0.5f, 0.0f,  // top right
+     0.5f, -0.5f, 0.0f,  // bottom right
+    -0.5f, -0.5f, 0.0f,  // bottom left
+    -0.5f,  0.5f, 0.0f   // top left 
+};
+
+unsigned int rect_indices[] = {
+    0, 1, 3,   // first triangle
+    1, 2, 3    // second triangle
+};
 
 /*
  * Validate the GLFW version. We should be using OpenGL 3.3
@@ -56,7 +75,7 @@ utl_assert((major = VERSION_MAJOR) && (minor = VERSION_MINOR), "Supported OpenGL
  * Initialize GLFW and tell it that we want to use OpenGL version 3.3
  * using core profile functionality means that we do not care about
  * backwards compatibility with older versions of OpenGL. This is okay
- * because legacy OpenGL is not usefule for us anyway.
+ * because legacy OpenGL is not useful for us anyway.
  */
 glfwInit();
 glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -68,9 +87,11 @@ glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
 /*
- * Create a window
+ * Create a window and then make the context current. This means that 
+ * all future OpenGL commands will be issued to the context of this
+ * window.
  */
-GLFWwindow* window = glfwCreateWindow(800, 600, "Validate GLFW", NULL, NULL);
+GLFWwindow * window = glfwCreateWindow(800, 600, "Validate GLFW", NULL, NULL);
 if (window == NULL)
     {
     printf("Failed to create GLFW window\n");
@@ -79,7 +100,7 @@ if (window == NULL)
     }
 glfwMakeContextCurrent(window);
 
-/**
+/*
  * Initialize the function pointers for OpenGL
  */
 if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -109,7 +130,11 @@ glBindVertexArray(VAO);
  */
 glGenBuffers(1, &VBO);
 glBindBuffer(GL_ARRAY_BUFFER, VBO);  
-glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+glBufferData(GL_ARRAY_BUFFER, sizeof(rect_vertices), rect_vertices, GL_STATIC_DRAW);
+
+glGenBuffers(1, &EBO);
+glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(rect_indices), rect_indices, GL_STATIC_DRAW);
 
 /*
  * Create a vertex shader object and compile it using the source code
@@ -179,13 +204,16 @@ while(!glfwWindowShouldClose(window))
     /*
      * Render commands go here
      */
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClearColor(0.1f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     glUseProgram(shader_program);
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, 3);
     
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
     /*
      * Swap the front and back buffers and poll new events
      */
