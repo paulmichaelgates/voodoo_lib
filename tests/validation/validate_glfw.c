@@ -3,6 +3,7 @@
 #include <GLFW/glfw3.h>
 
 #include "generic_types.h"
+#include "shader.h"
 #include "utl_assert.h"
 #include "utl_glfw.h"
 
@@ -40,7 +41,8 @@ unsigned int fragment_shader;
 unsigned int shader_program;
 int  success;
 char infoLog[512];
-
+int shdr_ret;
+char * fname;
 /*
  * Vertices for a triangle
  */
@@ -141,8 +143,20 @@ glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(rect_indices), rect_indices, GL_STA
  */
 vertex_shader = glCreateShader(GL_VERTEX_SHADER);
 
-glShaderSource(vertex_shader, 1, &vertexShaderSource, NULL);
-glCompileShader(vertex_shader);
+/*
+ * Read in the shader source code from the file and then compile it
+*/
+fname = "../../shader/simple_vertex.shader";
+shdr_ret = shader_compile(&vertex_shader, fname);
+if (shdr_ret != 0)
+    {
+    printf("Failed to compile vertex shader\n");
+    return -1;
+    }
+
+// todo remove
+// glShaderSource(vertex_shader, 1, &vertexShaderSource, NULL);
+// glCompileShader(vertex_shader);
 
 glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &success);
 
