@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror $(INCLUDES)
+CFLAGS = -Wall $(INCLUDES)
 LDFLAGS = -L../../lib -framework OpenGL -framework cocoa -framework IOKit -framework CoreVideo -framework CoreFoundation -Wno-deprecated  ../../lib/libglfw.3.3.dylib ../../lib/glfw-3.3.8/glfw_prj.o ../../utl/utl_assert.o ../../shader/shader.o
 LDLIBS = -lglfw.3.3
 

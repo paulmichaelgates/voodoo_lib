@@ -3,19 +3,16 @@
 #include <GLFW/glfw3.h>
 
 #include "generic_types.h"
+#include "linalg_ops.h"
+#include "linalg_types.h"
 #include "shader.h"
 #include "utl_assert.h"
 #include "utl_glfw.h"
 
-#define VERSION_MAJOR       3
-#define VERSION_MINOR       3
-#define TOGGLE_BLUE_ON      1.0f
-#define TOGGGLE_BLUE_OFF    0.0f
+#define VERSION_MAJOR 3
+#define VERSION_MINOR 3
 
-/* procedures */
 static void processInput(GLFWwindow *window);
-static void key_press_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
-static void toggle_background_color();
 
 const char *fragmentShaderSource = "#version 330 core\n"
 "out vec4 FragColor;\n"
@@ -24,11 +21,6 @@ const char *fragmentShaderSource = "#version 330 core\n"
 "{\n"
 "    FragColor = vec4(1.1f, 1.5f, 0.2f, 1.0f);\n"
 "}\0";
-
-/*
- variables
- */
-static float s_background_blue;
 
 int main()
 {
@@ -46,6 +38,7 @@ int  success;
 char infoLog[512];
 int shdr_ret;
 char * fname;
+
 /*
  * Vertices for a triangle
  */
@@ -53,22 +46,7 @@ float tri_vertices[] = {
    -1.0f, -1.0f, 0.0f,
     1.0f, -1.0f, 0.0f,
     0.0f,  1.0f, 0.0f
-};  
-
-/*
- * Vertices for a rectangle
- */
-// float rect_vertices[] = {
-//      0.5f,  0.5f, 0.0f,  // top right
-//      0.5f, -0.5f, 0.0f,  // bottom right
-//     -0.5f, -0.5f, 0.0f,  // bottom left
-//     -0.5f,  0.5f, 0.0f   // top left 
-// };
-
-// unsigned int rect_indices[] = {
-//     0, 1, 3,   // first triangle
-//     1, 2, 3    // second triangle
-// };
+};
 
 /*
  * Validate the GLFW version. We should be using OpenGL 3.3
@@ -90,12 +68,6 @@ glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #ifdef __APPLE__
 glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
-
-/*
- * Set default background color blue value for key press
- * validation
- */
-s_background_blue = TOGGLE_BLUE_ON;
 
 /*
  * Create a window and then make the context current. This means that 
@@ -141,11 +113,7 @@ glBindVertexArray(VAO);
  */
 glGenBuffers(1, &VBO);
 glBindBuffer(GL_ARRAY_BUFFER, VBO);  
-glBufferData(GL_ARRAY_BUFFER, sizeof(tri_vertices), tri_vertices, GL_DYNAMIC_DRAW);
-
-// glGenBuffers(1, &EBO);
-// glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-// glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(rect_indices), rect_indices, GL_STATIC_DRAW);
+glBufferData(GL_ARRAY_BUFFER, sizeof(tri_vertices), tri_vertices, GL_STATIC_DRAW);
 
 /*
  * Create a vertex shader object and compile it using the source code
@@ -215,11 +183,6 @@ glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 glEnableVertexAttribArray(0);   
 
 /*
- * Set up callbacks
- */
-glfwSetKeyCallback(window, key_press_callback);
-
-/*
  * Main render loop
  */
 while(!glfwWindowShouldClose(window))
@@ -229,15 +192,12 @@ while(!glfwWindowShouldClose(window))
     /*
      * Render commands go here
      */
-    glClearColor(0.1f, 0.1f, s_background_blue, 1.0f);
+    glClearColor(0.1f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     glUseProgram(shader_program);
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, 3);
-    
-    // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
     /*
      * Swap the front and back buffers and poll new events
@@ -261,49 +221,11 @@ return 0;
 static void processInput(GLFWwindow *window)
 {
 /*
-    * Close the window if the escape key is pressed
-    */
+* Close the window if the escape key is pressed
+*/
 if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
     glfwSetWindowShouldClose(window, TRUE);    
     }
 
-}
-
-/*
- * key_press_callback
- * Key press callback registered to test window. Used to validate
- * key press registrations.
- */
-static void key_press_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
-{
-/*
- Determine key pressed by the user
- Note: there is no debounce here
- */
-switch (key)
-    {
-    case GLFW_KEY_PAGE_UP:
-        toggle_background_color();
-        break;
-
-    default:
-        break;
-    }
-}
-
-/*
- * toggle_background_color
- * toggle the background color
- */
-static void toggle_background_color()
-{
-if(s_background_blue == TOGGLE_BLUE_ON)
-    {
-    s_background_blue = TOGGGLE_BLUE_OFF;
-    }
-else
-    {
-    s_background_blue = TOGGLE_BLUE_ON;
-    }
 }

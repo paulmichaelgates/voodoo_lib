@@ -30,6 +30,7 @@ if (fp == NULL)
  */
 fseek(fp, 0, SEEK_END);
 long size = ftell(fp);
+printf("File size is %ld\n", size);
 rewind(fp);
 
 *buffer = (char *)malloc(size + 1);
@@ -41,6 +42,8 @@ if (*buffer == NULL)
 
 fread(*buffer, size, 1, fp);
 fclose(fp);
+
+*buffer[size] = 0;
 
 return 0;
 
@@ -67,6 +70,8 @@ if(shader_read(shader_source, (char ** )&source_code) != 0)
     printf("Error reading shader source code\n");
     return -1;
     }
+
+puts(source_code);
 
 glShaderSource(*shader, 1, &source_code, NULL);
 glCompileShader(*shader);

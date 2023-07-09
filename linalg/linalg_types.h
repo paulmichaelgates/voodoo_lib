@@ -14,15 +14,30 @@
 
 typedef struct
     {
-    int dims;       /* Dimensions */
-    int * coords;   /* Coordinates */
+    int dims;           /* Dimensions */
+    int * coords;       /* Coordinates */
     }point_t;
 
 typedef struct
     {
-    int dims;       /* Dimensions */
+    int dims;           /* Dimensions */
     point_t points[ NUM_POINTS ];
     }line_t;
+
+typedef struct
+    {
+    float x;
+    float y;
+    float z;
+    }linalg_vector_3d_t;
+
+typedef struct
+    {
+    void * buff;        /* Data buffer */
+    uint32 el_size;     /* Element size */
+    uint64 rows;        /* Rows m */
+    uint64 cols;        /* Columns n */
+    }linalg_matrix_t;
 
 typedef uint8 component_err_t;
 enum
@@ -39,6 +54,12 @@ enum
     COMPONENT_ERR_INVALID_QUATERNION,
     COMPONENT_ERR_INVALID_POLYNOMIAL,
     COMPONENT_ERR_INVALID_FUNCTION,
+    };
+
+typedef uint8 linalg_matrix_err_t
+enum
+    {
+    LIN_ALG_MATRIX_ERR_NO_ERR,
     };
 
 /**
