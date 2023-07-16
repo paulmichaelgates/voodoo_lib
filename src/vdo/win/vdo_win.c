@@ -11,8 +11,20 @@ vdo_win_create
 Description:
     Creates a new window object.
  */
-vdo_error_t vdo_win_create(vdo_window_h * win_h, int width, int height, char * const title)
+vdo_error_t vdo_win_create(vdo_window_h * win_h, int width, int height, char * const title, vdo_win_type_t8 type)
 {
-return( gpu_create_win(win_h, width, height, title) ); // todo update these args
+/* Local variables */
+vdo_error_t ret_val;
 
+/* Call the low level procedure to create the window */
+ret_val = gpu_create_win(win_h, width, height, title);
+
+/* Set the window attributes */
+if(type >= VDO_WIN_TYPE_COUNT)
+    {
+    return VDO_ERR_WIN_INIT;
+    }
+win_h->type = type;
+
+return ret_val;
 }

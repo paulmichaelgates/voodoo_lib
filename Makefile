@@ -13,14 +13,14 @@ GPU_INTF = GPU_INTF_OPEN_GL
 # Compiler flags
 CFLAGS = -Wall -Wextra -g -fPIC -D$(GPU_INTF)
 
-OPENGL = -Iinclude -Iinclude/config -Isrc/gpu_intf/opengl  -Ilib/glfw-3.3.8 -Iutl -Ishader -Iglfw-3.3.8
+OPENGL = -Iinclude -Iinclude/config -Isrc/gpu_intf/opengl  -Isrc/gpu_intf/opengl/buf -Ilib/glfw-3.3.8 -Iutl -Ishader -Iglfw-3.3.8
 
 # Include directories
 INCLUDES = -Isrc -Isrc/gpu_intf -Isrc/vdo/win $(OPENGL)
 
 # Source directories
 # Adding a new directory? Add the directory and all sources will be compiled
-SRCDIRS = src/gpu_intf src/gpu_intf/opengl src src/vdo/win
+SRCDIRS = src/gpu_intf src/gpu_intf/opengl src/gpu_intf/opengl/buf src src/vdo/win src/vdo/gui 
 
 # Source files
 SOURCES = $(foreach dir,$(SRCDIRS),$(wildcard $(dir)/*.c))

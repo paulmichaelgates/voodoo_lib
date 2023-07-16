@@ -4,10 +4,11 @@
 
 #include "cfg_opengl.h"
 #include "generic_types.h"
+#include "gpu.h"
 #include "utl_assert.h"
 #include "voodoo.h"
 #include "vdo_error.h"
-#include "gpu.h"
+#include "open_gl_buf.h"
 
 /* Variables */
 static gpu_window_h * s_windows[ VDO_MAX_WINDOWS ];
@@ -26,6 +27,8 @@ vdo_error_t gpu_init()
  * Local variables
  */
 int major, minor, revision;
+
+open_gl_buf_init();
 
 /*
  * Validate libraries match expected project configuration (see cfg_opengl.h for

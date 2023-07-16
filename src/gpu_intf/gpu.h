@@ -25,5 +25,6 @@ typedef struct gpu_window_h_struc gpu_window_h;
 /* Procedures */
 vdo_error_t gpu_init();
 vdo_error_t gpu_create_win(vdo_window_h * win_h, int width, int height, char * const title);
+vdo_error_t gpu_gui_add_button(vdo_window_h * win_h, int x, int y, int width, int height, char * const text);
 
 #endif /* GPU_H_ */
