@@ -11,7 +11,9 @@ enum
 {
 VDO_ERR_NONE = 0,
 VDO_ERR_INIT,
-
+VDO_ERR_WIN_INIT,
+VDO_ERR_WIN,
+VDO_ERR_PARM,
 };
 
 #endif /* VDO_ERROR_H_ */

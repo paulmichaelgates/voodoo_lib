@@ -2,7 +2,10 @@
  * opengl.h
  */
 
-#include "glfw3.h"
+#include <GLFW/glfw3.h>
+
+/* Types */
+typedef GLFWwindow gpu_window_h;
 
 /* win_key_mode_uint8 */
 
