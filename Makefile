@@ -13,7 +13,7 @@ GPU_INTF = GPU_INTF_OPEN_GL
 # Compiler flags
 CFLAGS = -Wall -Wextra -g -fPIC -D$(GPU_INTF)
 
-OPENGL = -Iinclude -Iinclude/config -Isrc/gpu_intf/opengl  -Isrc/gpu_intf/opengl/buf -Ilib/glfw-3.3.8 -Iutl -Ishader -Iglfw-3.3.8
+OPENGL = -Iinclude -Iinclude/config -Isrc/vdo/utl -Isrc/gpu_intf/opengl -Isrc/gpu_intf/opengl/gui  -Isrc/gpu_intf/opengl/buf -Ilib/glfw-3.3.8 -Iutl -Ishader -Iglfw-3.3.8
 
 # Include directories
 INCLUDES = -Isrc -Isrc/gpu_intf -Isrc/vdo/win $(OPENGL)

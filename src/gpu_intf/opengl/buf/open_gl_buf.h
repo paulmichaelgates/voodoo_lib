@@ -7,6 +7,7 @@
 
 #include "generic_types.h"
 #include "vdo_error.h"
+#include "voodoo.h"
 
 /* Literal constants */
 #define OPENGL_RECT_BUF_SIZE 12
@@ -17,13 +18,15 @@ typedef uint8 open_gl_buf_type;
 enum
     {
     OPEN_GL_BUF_TYPE_RECT,      /* Rectangular buffer object type */
+    OPEN_GL_BUF_TYPE_COUNT,
     };
 
 typedef uint32 open_gl_rect_buf_id_t32;
 
 /* Procedures */
 void open_gl_buf_init();
-vdo_error_t open_gl_create_buf(open_gl_buf_type type, open_gl_rect_buf_id_t32 * id);
+vdo_error_t open_gl_alloc_buf(open_gl_buf_type type, open_gl_rect_buf_id_t32 * id);
 vdo_error_t open_gl_get_buf(open_gl_buf_type type, open_gl_rect_buf_id_t32 id, void * buf);
+vdo_error_t open_gl_assoc_buf(open_gl_buf_type type, vdo_window_h * win_h, uint32 buf_idx );
 
 #endif /* OPENGL_BUF_H_ */

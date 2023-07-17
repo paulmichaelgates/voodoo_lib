@@ -12,7 +12,7 @@
 
 /* Variables */
 static gpu_window_h * s_windows[ VDO_MAX_WINDOWS ];
-static uint32         s_registered_windows;
+static uint16         s_registered_windows;
 
 /* Procedures */
 static vdo_error_t make_context_current(vdo_win_id_t16 win_id);
@@ -120,6 +120,32 @@ return VDO_ERR_NONE;
 }
 
 /*
+ *  open_gl_win_updt_current_context
+ * 
+ * Description:
+ *      Given a window handle, make the underlying window the
+ *      current context, i.e., the target for future OpenGL
+ *      operations.
+ * 
+ * Notes:
+ *      OpenGL operates as a state machine so cals to update
+ *      vertex buffers will apply to the current context, i.e.,
+ *      the window that was set as the current context last
+ */
+vdo_error_t open_gl_win_updt_current_context( vdo_window_h * win_h )
+{
+/* Input validation */
+if( NULL == win_h )
+    {
+    return VDO_ERR_PARM;
+    }
+
+/*  Update current context */
+return( make_context_current( win_h->id ) );
+
+}
+
+/*
  * make_context_current
  */
 static vdo_error_t make_context_current(vdo_win_id_t16 win_id)
@@ -140,3 +166,4 @@ if((gpu_window_h *)glfwGetCurrentContext() != s_windows[ win_id ])
 return VDO_ERR_NONE;
 
 }
+
